@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import * as _ from "lodash";
 import * as dialogs from "ui/dialogs";
 import {
@@ -13,6 +13,9 @@ import { AndroidData, ShapeEnum } from 'nativescript-ng-shadow';
 import { Progress } from 'ui/progress';
 import { isAndroid, isIOS } from "platform"
 import { EventData } from "tns-core-modules/ui/page/page";
+import { ItemEventData } from "ui/list-view"
+import { ListViewItemSnapMode } from "nativescript-pro-ui/listview";
+import { RadListViewComponent } from "nativescript-pro-ui/listview/angular";
 
 
 @Component({
@@ -49,6 +52,7 @@ export class StartupComponent implements OnInit {
     this.progressValue = 0;
   }
 
+  @ViewChild('myRadListView') listViewComponent: RadListViewComponent;
   ngOnInit(): void {
   }
 
@@ -121,6 +125,8 @@ export class StartupComponent implements OnInit {
       selectedObject.access = true;
     }
 
+    ListViewItemSnapMode
+
     if (this.checkTapAccess(selectedObject)) {
       this.setActive(id);
       selectedObject.active = true;
@@ -159,10 +165,12 @@ export class StartupComponent implements OnInit {
     this.currentBadgesList[id].selected = !this.currentBadgesList[id].selected;
   }
 
-
+  scrollValue;
   onClickNext() {
     let obj = this.checkSelected();
     if (obj) {
+      
+     this.scrollValue =  this.scrollItem(this.tabsItemArray[this.selectedObjectId]);
       this.tabsItemArray[this.selectedObjectId].completed = true;
       this.progressValue = this.progressValue + 20;
       this.tabItemTap(this.selectedObjectId + 1, "next");
@@ -188,56 +196,22 @@ export class StartupComponent implements OnInit {
 
 
   get getActive() {
-    if (this.tabsItemArray[this.selectedObjectId].access == true && this.tabsItemArray[this.selectedObjectId].completed != true) {
-      return true;
-    }
+    return this.tabsItemArray[this.selectedObjectId].access == true && this.tabsItemArray[this.selectedObjectId].completed != true;
   }
 
   getDot(item) {
-    if (item.completed == false && item.active == true) {
-      return true;
-    }
+    return item.completed == false && item.active == true;
   }
 
   buttonShadow: AndroidData = {
     elevation: 8,
     cornerRadius: 40,
-    // bgcolor: '#ff1744',
-    // shape: ShapeEnum.OVAL,
   };
-  
-  
-  
-    // public direction: number;
-    // onSwipe(args: SwipeGestureEventData) {
-  //   console.log("Swipe!");
-  //   console.log("Object that triggered the event: " + args.object);
-  //   console.log("View that triggered the event: " + args.view);
-  //   console.log("Event name: " + args.eventName);
-  //   console.log("Swipe Direction: " + args.direction);
-
-  //   this.direction = args.direction;
-
-  //   switch (this.direction) {
-  //     case 1: {
-
-  //         break;
-  //       }
-  //     case 2: {
-  //         this.findCurrentIndex();
-  //         break;
-  //       }
-  //     default:
-  //       break;
-  //   }
-  // }
 
 
-  // findCurrentIndex()
-  // {
-  //   return _.findIndex(this.tabsItemArray, function (o) {
-  //     return o.id = this.selectedObjectId;
-  //   });
-  // }
+  public scrollItem(scrollItemId) {
+    this.listViewComponent.listView.scrollToIndex(scrollItemId.id, false);
+  }
+
 
 }
