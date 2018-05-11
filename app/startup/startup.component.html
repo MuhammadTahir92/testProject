@@ -1,0 +1,44 @@
+<ActionBar [title]="actionBar()" class="actionbar">
+</ActionBar>
+<GridLayout rows="auto,4*,auto,*" columns="*">
+  <StackLayout row="0" backgroundColor="white">
+    <Progress [value]="progressValue" class="progressbar" maxValue="100"></Progress>
+  </StackLayout>
+
+  <GridLayout row="1" rows="auto" backgroundColor="#efefef" style="padding-top:12;padding-left:12; padding-right:12;">
+    <FlexboxLayout flexWrap="wrap">
+      <Button *ngFor="let item of currentBadgesList; let i = index; let last = last;" [text]="item.title" [@state]="stateAnimate"
+        class="{{ item.selected ? 'badgeButtonSelected' : 'badgeButton' }}" id="item.id+'id'" (tap)="onBadgeTap(item.id)"></Button>
+      </FlexboxLayout>
+  </GridLayout>
+
+  <GridLayout rows="auto,auto,auto" columns="*" row="2" backgroundColor="#efefef">
+    <StackLayout style="padding-left:12; padding-right:12;">
+      <RadListView #myRadListView [items]="tabsItemArray">
+        <ng-template tkListItemTemplate let-item="item">
+          <StackLayout style="margin-left:10;margin-right:10" #tabItem (tap)="tabItemTap(item.id)">
+            <GridLayout rows="auto,auto,*" columns="*">
+              <Label  text="&#xE876;" [visibility]="item.completed == true    ? 'visible' : 'hidden'" class="mdiBottomBarIcons dotColor" row="0"
+                style="color:#db7e57;font-size:20;text-align:center;vertical-align: bottom;" textWrap="true"></Label>
+              <Label text="&#xE3A6;"  *ngIf="getDot(item)"  class="{{ item.active ? 'mdiBottomBarIcons dotColor' : 'mdiBottomBarIcons dotColor ' }}"
+                row="0" style="color:#db7e57;font-size:5;text-align:center;vertical-align: middle;" textWrap="true"></Label>
+              <Label [text]="item.name" horizontalAlignment="center" row="1" style="padding-bottom:2" class="{{ item.active ? '' : 'opacityColor' }}"></Label>
+              <StackLayout [@state]="segmentAnimate" row="2" orientation="horizontal" class="{{ item.active ? 'lineBackground' : 'lineBackground opacityColor' }}">
+                <Label text="&nbsp;" height="2"></Label>
+              </StackLayout>
+            </GridLayout>
+          </StackLayout>
+        </ng-template>
+        <ListViewLinearLayout tkListViewLayout scrollDirection="Horizontal" itemWidth="80"></ListViewLinearLayout>
+      </RadListView>
+    </StackLayout>
+
+  </GridLayout>
+
+  <GridLayout rows="*" columns="*" row="3" backgroundColor="white">
+
+    <Button text="Next" width="40%" horizontalAlignment="center" height="40%" class="nextButton" (tap)="onClickNext(tabItem)"></Button>
+  </GridLayout>
+</GridLayout>
+
+

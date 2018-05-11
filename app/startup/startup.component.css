@@ -1,0 +1,69 @@
+.actionbar
+{
+    background-color:white;
+}
+
+
+.notActive
+{
+    background-color: #edbfab;
+    color:#edbfab;
+}
+.active
+{
+    background-color: #db7e57;
+    color:#db7e57;
+}
+.opacityColor
+{
+    opacity: 0.6;
+}
+.progressbar
+{
+    background-color: #db7e57;
+    color:#db7e57;
+}
+
+.nextButton
+{
+    border-width:1;
+    border-color: #f1971f;
+    color: #f1971f;
+    border-radius: 30%;
+}
+
+.badgeButton
+{
+    border-radius: 25%;
+    background-color: white;
+    margin:3;
+    padding-top:0;
+    padding-bottom:0;
+    font-size: 12;
+}
+
+.badgeButtonSelected
+{
+    border-radius: 25%;
+    background-color: #db7e57;
+    color:white;
+    margin:3;
+    padding-top:0;
+    padding-bottom:0;
+    font-size: 12;
+}
+
+.lineBackground
+{
+     background-color: #db7e57;
+}
+
+.dotColor
+{
+     color: #db7e57;
+}
+
+ActionBar {
+    border-width: 1;
+    border-color: transparent;
+}
