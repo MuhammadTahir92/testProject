@@ -8,7 +8,12 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { SwipeGestureEventData } from "ui/gestures";
 import { AndroidData, ShapeEnum } from 'nativescript-ng-shadow';
+import { Progress } from 'ui/progress';
+import { isAndroid, isIOS } from "platform"
+import { EventData } from "tns-core-modules/ui/page/page";
+
 
 @Component({
   selector: 'app-startup',
@@ -200,4 +205,39 @@ export class StartupComponent implements OnInit {
     // bgcolor: '#ff1744',
     // shape: ShapeEnum.OVAL,
   };
+  
+  
+  
+    // public direction: number;
+    // onSwipe(args: SwipeGestureEventData) {
+  //   console.log("Swipe!");
+  //   console.log("Object that triggered the event: " + args.object);
+  //   console.log("View that triggered the event: " + args.view);
+  //   console.log("Event name: " + args.eventName);
+  //   console.log("Swipe Direction: " + args.direction);
+
+  //   this.direction = args.direction;
+
+  //   switch (this.direction) {
+  //     case 1: {
+
+  //         break;
+  //       }
+  //     case 2: {
+  //         this.findCurrentIndex();
+  //         break;
+  //       }
+  //     default:
+  //       break;
+  //   }
+  // }
+
+
+  // findCurrentIndex()
+  // {
+  //   return _.findIndex(this.tabsItemArray, function (o) {
+  //     return o.id = this.selectedObjectId;
+  //   });
+  // }
+
 }
