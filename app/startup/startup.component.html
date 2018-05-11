@@ -1,6 +1,6 @@
 <ActionBar [title]="actionBar()" class="actionbar">
 </ActionBar>
-<GridLayout rows="auto,3*,auto,*" columns="*">
+<GridLayout rows="auto,3*,auto,*" columns="*" (loaded)="onPageLoaded()">
   <GridLayout rows="*" columns="*">
     <Progress [value]="progressValue" class="progressbar" style="z-index: 1;" maxValue="100"></Progress>
     <Progress [value]="progressValue" class="progressbar" style="z-index: 0;margin-top: 8;" maxValue="100"></Progress>
@@ -9,10 +9,9 @@
   </StackLayout>
   <GridLayout row="1" rows="auto" backgroundColor="#efefef" style="margin-top: -6 ;z-index:1;padding-top:12;padding-left:12; padding-right:12;">
     <FlexboxLayout flexWrap="wrap">
-      <Button [shadow]="buttonShadow" *ngFor="let item of currentBadgesList; let i = index; let last = last;" [text]="&nbsp;&nbsp;&nbsp;item.title&nbsp;&nbsp;&nbsp;"
+      <Button  [shadow]="buttonShadow" *ngFor="let item of currentBadgesList; let i = index; let last = last;" [text]="&nbsp;&nbsp;&nbsp;item.title&nbsp;&nbsp;&nbsp;"
         [@state]="stateAnimate" class="{{ item.selected ? 'badgeButtonSelected' : 'badgeButton' }}" id="item.id+'id'" (tap)="onBadgeTap(item.id)"></Button>
         <Label [text]="scrollValue" textWrap="true"></Label>
-        
       </FlexboxLayout>
   </GridLayout>
   <GridLayout rows="auto,auto,auto" columns="*" row="2" backgroundColor="#efefef">
@@ -23,10 +22,10 @@
             <GridLayout rows="auto,auto,*" columns="*">
               <Label text="&#xE876;" [visibility]="item.completed == true    ? 'visible' : 'hidden'" class="{{ item.completed ? 'mdiBottomBarIcons dotColor' : 'mdiBottomBarIcons dotColor opacityColor' }}"
                 row="0" style="color:#db7e57;font-size:15;text-align:center;vertical-align: bottom;" textWrap="true"></Label>
-              <Label text="&#xE3A6;" *ngIf="getDot(item)" class="{{ item.active ? 'mdiBottomBarIcons dotColor' : 'mdiBottomBarIcons dotColor ' }}"
+              <Label text="&#xE3A6;" *ngIf="isDot(item)" class="{{ item.active ? 'mdiBottomBarIcons dotColor' : 'mdiBottomBarIcons dotColor ' }}"
                 row="0" style="color:#db7e57;font-size:5;text-align:center;vertical-align: middle;" textWrap="true"></Label>
               <Label [text]="item.name" horizontalAlignment="center" row="1" style="padding-bottom:2;font-size: 12;" class="{{ item.active ? '' : 'opacityColor' }}"></Label>
-              <StackLayout row="2" orientation="horizontal" class="{{ item.active ? 'lineBackground' : 'lineBackground opacityColor' }}">
+              <StackLayout row="2" [visibility]="item.active ? 'visible' : 'hidden'" orientation="horizontal" class="{{ item.active ? 'lineBackground' : 'lineBackground opacityColor' }}">
                 <Label text="&nbsp;" height="2"></Label>
                 <!-- <Label [text]="item.active" textWrap="true"></Label> -->
               </StackLayout>
