@@ -8,6 +8,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { AndroidData, ShapeEnum } from 'nativescript-ng-shadow';
 
 @Component({
   selector: 'app-startup',
@@ -48,7 +49,7 @@ export class StartupComponent implements OnInit {
 
   tabsItemArray = [
     {
-      id: 0, access: true, name: "Current Status", completed: false, active: true,
+      id: 0, access: true, name: "CURRENT STATE", completed: false, active: true,
       actionbar: "Your current status", badgesData: [
         { compare: "currentStatus", id: 0, title: "Employed", selected: false, },
         { compare: "currentStatus", id: 1, title: "Unmployed", selected: false, },
@@ -58,14 +59,14 @@ export class StartupComponent implements OnInit {
       ]
     },
     {
-      id: 1, access: false, name: "Education", completed: false, active: false, actionbar: "Your education", badgesData: [
+      id: 1, access: false, name: "EDUCATION", completed: false, active: false, actionbar: "Your education", badgesData: [
         { compare: "education", id: 0, title: "Graduate", selected: false, },
         { compare: "education", id: 1, title: "Matric", selected: false, },
         { compare: "education", id: 2, title: "Pre Engineering", selected: false, },
       ]
     },
     {
-      id: 2, access: false, name: "Work", completed: false, active: false, actionbar: "Type of working looking for", badgesData: [
+      id: 2, access: false, name: "WORK", completed: false, active: false, actionbar: "Type of working looking for", badgesData: [
         { compare: "work", id: 0, title: "Full time", selected: false, },
         { compare: "work", id: 1, title: "part time", selected: false, },
         { compare: "work", id: 2, title: "extra income", selected: false, },
@@ -76,7 +77,7 @@ export class StartupComponent implements OnInit {
       ]
     },
     {
-      id: 3, access: false, name: "Location", completed: false, active: false, actionbar: "Select your city", badgesData: [
+      id: 3, access: false, name: "LOCATION", completed: false, active: false, actionbar: "Select your city", badgesData: [
         { compare: "location", id: 0, title: "Lahore", selected: false, },
         { compare: "location", id: 1, title: "Karachi", selected: false, },
         { compare: "location", id: 2, title: "Islamabad", selected: false, },
@@ -85,7 +86,7 @@ export class StartupComponent implements OnInit {
       ]
     },
     {
-      id: 4, access: false, name: "Salary", completed: false, active: false, actionbar: "Select your expected salary", badgesData: [
+      id: 4, access: false, name: "SALARY", completed: false, active: false, actionbar: "Select your expected salary", badgesData: [
         { compare: "salary", id: 0, title: "10000", selected: false, },
         { compare: "salary", id: 1, title: "20000", selected: false, },
         { compare: "salary", id: 2, title: "15000", selected: false, },
@@ -193,4 +194,10 @@ export class StartupComponent implements OnInit {
     }
   }
 
+  buttonShadow: AndroidData = {
+    elevation: 8,
+    cornerRadius: 40,
+    // bgcolor: '#ff1744',
+    // shape: ShapeEnum.OVAL,
+  };
 }

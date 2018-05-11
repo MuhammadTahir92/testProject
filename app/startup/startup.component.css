@@ -16,7 +16,7 @@
 }
 .opacityColor
 {
-    opacity: 0.6;
+    opacity: 0.5;
 }
 .progressbar
 {
@@ -37,9 +37,8 @@
     border-radius: 25%;
     background-color: white;
     margin:3;
-    padding-top:0;
-    padding-bottom:0;
     font-size: 12;
+    height: 40;
 }
 
 .badgeButtonSelected
@@ -48,9 +47,23 @@
     background-color: #db7e57;
     color:white;
     margin:3;
-    padding-top:0;
-    padding-bottom:0;
     font-size: 12;
+    height: 40;
+}
+.badgeButtonForLabel
+{
+    border-radius: 25%;
+    background-color: white;
+    color:black;
+    margin:3;
+    font-size: 12;
+    height: 40;
+    width:auto;
+    padding-left: 10;
+    padding-right: 10;
+    text-align: center;
+    vertical-align: middle;
+
 }
 
 .lineBackground
