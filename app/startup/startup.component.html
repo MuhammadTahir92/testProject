@@ -7,7 +7,7 @@
   </GridLayout>
   <StackLayout row="0" style="z-index: 0;">
   </StackLayout>
-  <GridLayout row="1" rows="auto" backgroundColor="#efefef" style="margin-top: -6 ;z-index:1;padding-top:12;padding-left:12; padding-right:12;">
+  <GridLayout (swipe)="onSwipe($event)"  row="1" rows="auto" backgroundColor="#efefef" style="margin-top: -6 ;z-index:1;padding-top:12;padding-left:12; padding-right:12;">
     <FlexboxLayout flexWrap="wrap">
       <Button  [shadow]="buttonShadow" *ngFor="let item of currentBadgesList; let i = index; let last = last;" [text]="&nbsp;&nbsp;&nbsp;item.title&nbsp;&nbsp;&nbsp;"
         [@state]="stateAnimate" class="{{ item.selected ? 'badgeButtonSelected' : 'badgeButton' }}" id="item.id+'id'" (tap)="onBadgeTap(item.id)"></Button>
@@ -25,7 +25,7 @@
               <Label text="&#xE3A6;" *ngIf="isDot(item)" class="{{ item.active ? 'mdiBottomBarIcons dotColor' : 'mdiBottomBarIcons dotColor ' }}"
                 row="0" style="color:#db7e57;font-size:5;text-align:center;vertical-align: middle;" textWrap="true"></Label>
               <Label [text]="item.name" horizontalAlignment="center" row="1" style="padding-bottom:2;font-size: 12;" class="{{ item.active ? '' : 'opacityColor' }}"></Label>
-              <StackLayout row="2" [visibility]="item.active ? 'visible' : 'hidden'" orientation="horizontal" class="{{ item.active ? 'lineBackground' : 'lineBackground opacityColor' }}">
+              <StackLayout row="2" [visibility]="item.badgesData ? 'visible' : 'collapsed'" orientation="horizontal" class="{{ isCurrent(item) ? 'lineBackground' : 'lineBackground opacityColor' }}">
                 <Label text="&nbsp;" height="2"></Label>
                 <!-- <Label [text]="item.active" textWrap="true"></Label> -->
               </StackLayout>

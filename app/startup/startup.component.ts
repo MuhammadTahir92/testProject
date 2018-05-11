@@ -82,9 +82,6 @@ export class StartupComponent {
   }
 
   checkTapAccess(obj) {
-    if (!obj.access) {
-      dialogs.alert("Please select one item ");
-    }
     return obj.access;
   }
 
@@ -100,7 +97,7 @@ export class StartupComponent {
     if (id > 3 && id < 9) {
       let selectedObject = _.find(this.tabsItemArray, { id: id });
 
-      if (name == "next") {
+      if (selectedObject <= this.selectedObjectId || selectedObject.completed) {
         selectedObject.access = true;
       }
 
@@ -123,8 +120,8 @@ export class StartupComponent {
 
   onClickNext() {
     if (this.selectedObjectId < 9) {
-    this.tabsItemArray[this.selectedObjectId].completed = true;
-    
+      this.tabsItemArray[this.selectedObjectId].completed = true;
+
       this.selectedObjectId++;
 
       this.scrollValue = this.scrollItem(this.tabsItemArray[this.selectedObjectId]);
@@ -151,6 +148,11 @@ export class StartupComponent {
     return item.completed == false && item.id == centerTabId;
   }
 
+  isCurrent(item) {
+    let centerTabId = this.selectedObjectId > 4 ? this.selectedObjectId : 4
+    return item.id == centerTabId;
+  }
+
   public scrollItem(scrollItem) {
     this.listViewComponent.listView.scrollToIndex(scrollItem.id > 4 ? scrollItem.id : 4, true, ListViewItemSnapMode.Center);
   }
@@ -159,12 +161,54 @@ export class StartupComponent {
     return _.findIndex(this.tabsItemArray, { obj });
   }
 
+
+
+  public direction: number;
+  onSwipe(args: SwipeGestureEventData) {
+    console.log("Swipe!");
+    console.log("Object that triggered the event: " + args.object);
+    console.log("View that triggered the event: " + args.view);
+    console.log("Event name: " + args.eventName);
+    console.log("Swipe Direction: " + args.direction);
+
+    this.direction = args.direction;
+
+    switch (this.direction) {
+      case 1: {
+        let index = this.findCurrentIndex();
+        if (index > 3 && index < 9) {
+          index--;
+          this.listViewComponent.listView.scrollToIndex(index, true, ListViewItemSnapMode.Center);
+          this.getBadgesData(index);
+        }
+        break;
+      }
+      case 2: {
+        let index = this.findCurrentIndex();
+        if (index > 3 && index < 9) {
+          this.tabsItemArray[index].completed = true;
+          index++;
+          this.listViewComponent.listView.scrollToIndex(index, true, ListViewItemSnapMode.Center);
+          this.getBadgesData(index);
+        }
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
+
+  findCurrentIndex() {
+    return _.findIndex(this.tabsItemArray, { id: this.selectedObjectId });
+  }
+
   initializeData() {
     this.tabsItemArray = [
-      { id: 0, name: "                     "},
-      { id: 1, name: "                     "},
-      { id: 2, name: "                     "},
-      { id: 3, name: "                     "},
+      { id: 0, name: "                     " },
+      { id: 1, name: "                     " },
+      { id: 2, name: "                     " },
+      { id: 3, name: "                     " },
       {
         id: 4, access: true, name: "CURRENT STATE", completed: false, active: true,
         actionbar: "Your current status", badgesData: [
@@ -210,8 +254,8 @@ export class StartupComponent {
           { compare: "salary", id: 3, title: "40000", selected: false, },
         ]
       },
-      {   id: 9, name: "                     "},
-      {   id: 10, name: "                     "},
+      { id: 9, name: "                     " },
+      { id: 10, name: "                     " },
     ]
   }
 
