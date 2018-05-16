@@ -133,8 +133,6 @@ export class StartupComponent {
   onClickNext() {
     if (this.selectedObjectId < 6) {
       this.tabsItemArray[this.selectedObjectId].completed = true;
-      this.falseAllSelected();
-      this.tabsItemArray[this.selectedObjectId].tick = true;
       this.selectedObjectId++;
 
       this.scrollValue = this.scrollItem(this.tabsItemArray[this.selectedObjectId]);
@@ -143,12 +141,6 @@ export class StartupComponent {
     }
   }
 
-  falseAllSelected()
-  {
-    for (let index = 0; index < this.tabsItemArray.length; index++) {
-      this.tabsItemArray[index].tick = false;
-    }
-  }
 
   checkSelected() {
     return _.find(this.tabsItemArray[this.selectedObjectId].badgesData, { selected: true });
@@ -166,13 +158,9 @@ export class StartupComponent {
   isDot() {
     let index = this.findCurrentIndex();
     let centerTabId = this.selectedObjectId > 1 ? this.selectedObjectId : 1
-    return this.tabsItemArray[index].access == true && index == centerTabId && this.tabsItemArray[index].completed == false;
+    return this.tabsItemArray[index].access == true && index == centerTabId ;
   }
 
-  isTick() {
-    let centerTabId = this.selectedObjectId > 1 ? this.selectedObjectId : 1
-    return this.tabsItemArray[this.tabedId].tick == true && this.tabedId != centerTabId;
-  }
 
 
   isCurrent(item) {
@@ -278,7 +266,7 @@ export class StartupComponent {
     this.tabsItemArray = [
       { id: 0, name: "                              " },
       {
-        id: 1, access: true, name: "CURRENT STATE", completed: false, active: true,tick: false,
+        id: 1, access: true, name: "CURRENT STATE", completed: false, active: true,
         actionbar: "Your current status", badgesData: [
           { compare: "currentStatus", id: 0, title: "Employed", selected: false, },
           { compare: "currentStatus", id: 1, title: "Unmployed", selected: false, },
@@ -288,14 +276,14 @@ export class StartupComponent {
         ]
       },
       {
-        id: 2, access: false, name: "EDUCATION", completed: false,tick: false,  active: false, actionbar: "Your education", badgesData: [
+        id: 2, access: false, name: "EDUCATION", completed: false,  active: false, actionbar: "Your education", badgesData: [
           { compare: "education", id: 0, title: "Graduate", selected: false, },
           { compare: "education", id: 1, title: "Matric", selected: false, },
           { compare: "education", id: 2, title: "Pre Engineering", selected: false, },
         ]
       },
       {
-        id: 3, access: false, name: "WORK", completed: false,tick: false,  active: false, actionbar: "Type of working looking for", badgesData: [
+        id: 3, access: false, name: "WORK", completed: false,  active: false, actionbar: "Type of working looking for", badgesData: [
           { compare: "work", id: 0, title: "Full time", selected: false, },
           { compare: "work", id: 1, title: "part time", selected: false, },
           { compare: "work", id: 2, title: "extra income", selected: false, },
@@ -306,7 +294,7 @@ export class StartupComponent {
         ]
       },
       {
-        id: 4, access: false, name: "LOCATION", completed: false,tick: false,  active: false, actionbar: "Select your city", badgesData: [
+        id: 4, access: false, name: "LOCATION", completed: false,  active: false, actionbar: "Select your city", badgesData: [
           { compare: "location", id: 0, title: "Lahore", selected: false, },
           { compare: "location", id: 1, title: "Karachi", selected: false, },
           { compare: "location", id: 2, title: "Islamabad", selected: false, },
@@ -315,7 +303,7 @@ export class StartupComponent {
         ]
       },
       {
-        id: 5, access: false, name: "SALARY", completed: false, tick: false, active: false, actionbar: "Select your expected salary", badgesData: [
+        id: 5, access: false, name: "SALARY", completed: false,  active: false, actionbar: "Select your expected salary", badgesData: [
           { compare: "salary", id: 0, title: "10000", selected: false, },
           { compare: "salary", id: 1, title: "20000", selected: false, },
           { compare: "salary", id: 2, title: "15000", selected: false, },

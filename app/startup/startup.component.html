@@ -21,9 +21,8 @@
       <RadListView #myRadListView [items]="tabsItemArray" (scrolled)="onScrolled($event)">
         <ng-template tkListItemTemplate let-item="item">
           <StackLayout style="margin-left:10;margin-right:10" #tabItem (tap)="tabItemTap(item.id)">
-            <GridLayout rows="auto,auto,*" columns="*">
-              <Label text="&#xE876;" [visibility]="item.completed ? 'visible' : 'collapsed'" class="{{ item.completed ? 'mdiBottomBarIcons dotColor' : 'mdiBottomBarIcons dotColor opacityColor' }}"
-                row="0" style="color:#db7e57;font-size:15;text-align:center;vertical-align: bottom;" textWrap="true"></Label>
+            <GridLayout rows="auto,auto,auto" columns="*">
+              <Label text="&#xE876;"  [visibility]="item.completed ? 'visible' : 'hidden'" style="color:#db7e57;font-size:15;text-align:center;vertical-align: bottom;" class="mdiBottomBarIcons dotColor" row="0"  textWrap="false"></Label>
               <Label [text]="item.name" horizontalAlignment="center" row="1" style="padding-bottom:2;font-size: 12;" class="{{ isCurrent(item) ? 'black' : 'opacityColor' }}"></Label>
               <StackLayout row="2" [visibility]="item.badgesData ? 'visible' : 'collapsed'" orientation="horizontal" class="{{ isCurrent(item) ? 'lineBackground' : 'lineBackground opacityColor' }}">
                 <Label text="&nbsp;" height="2"></Label>
@@ -34,7 +33,6 @@
         <ListViewLinearLayout tkListViewLayout scrollDirection="Horizontal" itemWidth="80"></ListViewLinearLayout>
       </RadListView>
     </StackLayout>
-
   </GridLayout>
 
   <GridLayout rows="auto,*" columns="*" row="3" backgroundColor="white">
