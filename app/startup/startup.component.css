@@ -18,11 +18,7 @@
 {
     opacity: 0.5;
 }
-.progressbar
-{
-    background-color: #db7e57;
-    color:#db7e57;
-}
+
 
 .nextButton
 {
@@ -79,4 +75,9 @@
 ActionBar {
     border-width: 1;
     border-color: transparent;
+}
+
+.black
+{
+    color: black;
 }

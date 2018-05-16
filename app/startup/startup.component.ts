@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from "@angular/core";
 import * as _ from "lodash";
 import * as dialogs from "ui/dialogs";
 import {
@@ -14,8 +14,9 @@ import { Progress } from 'ui/progress';
 import { isAndroid, isIOS } from "platform"
 import { EventData } from "tns-core-modules/ui/page/page";
 import { ItemEventData } from "ui/list-view"
-import { ListViewItemSnapMode } from "nativescript-pro-ui/listview";
+import { ListViewItemSnapMode, ListViewScrollEventData } from "nativescript-pro-ui/listview";
 import { RadListViewComponent } from "nativescript-pro-ui/listview/angular";
+import { AnimationCurve } from "ui/enums";
 
 
 @Component({
@@ -36,8 +37,8 @@ import { RadListViewComponent } from "nativescript-pro-ui/listview/angular";
       state("segmentOpacity", style({
         opacity: 0.6,
       })),
-      transition("inactive <=> active", [animate("300ms ease-out")]),
-      transition("inactive <=> segmentOpacity", [animate("300ms ease-out")]),
+      transition("inactive <=> active", [animate("100ms ease-out")]),
+      transition("inactive <=> segmentOpacity", [animate("100ms ease-out")]),
     ]),
   ]
 })
@@ -50,7 +51,7 @@ export class StartupComponent {
   progressValue: number = 0;
   scrollValue;
   tabsItemArray: any;
-
+  tapItem = 0;
   buttonShadow: AndroidData = {
     elevation: 8,
     cornerRadius: 40,
@@ -59,8 +60,9 @@ export class StartupComponent {
   @ViewChild('myRadListView') listViewComponent: RadListViewComponent;
 
   constructor() {
+
     this.initializeData();
-    this.getBadgesData(4);
+    this.getBadgesData(1);
     this.progressValue = 0;
   }
 
@@ -73,12 +75,17 @@ export class StartupComponent {
   // }
 
   onPageLoaded() {
-    this.listViewComponent.listView.scrollToIndex(4, false, ListViewItemSnapMode.Center);
+    this.listViewComponent.listView.scrollToIndex(1, false, ListViewItemSnapMode.Center);
   }
 
   getBadgesData(id) {
     this.selectedObjectId = id;
     this.currentBadgesList = id ? this.tabsItemArray[id].badgesData : this.tabsItemArray[0].badgesData;
+  }
+
+  onProgressLoaded(event) {
+    event.object.color = "#db7e57";
+    event.object.backgroundColor = "white";
   }
 
   checkTapAccess(obj) {
@@ -92,12 +99,16 @@ export class StartupComponent {
   onBadgeTap(id) {
     this.currentBadgesList[id].selected = !this.currentBadgesList[id].selected;
   }
-
+  tabedId;
   tabItemTap(id, name) {
-    if (id > 3 && id < 9) {
+    this.tabedId = id;
+    this.tapItem = 1;
+    this.tappedValue = true;
+    if (id > 0 && id < 6) {
+
       let selectedObject = _.find(this.tabsItemArray, { id: id });
 
-      if (selectedObject <= this.selectedObjectId || selectedObject.completed) {
+      if (name == "next" || selectedObject <= this.selectedObjectId || selectedObject.completed) {
         selectedObject.access = true;
       }
 
@@ -110,6 +121,7 @@ export class StartupComponent {
         setTimeout(() => {
           this.getBadgesData(id);
           setTimeout(() => {
+            this.tappedValue = false;
             this.stateAnimate = "inactive";
             this.segmentAnimate = "inactive";
           }, 200);
@@ -119,14 +131,22 @@ export class StartupComponent {
   }
 
   onClickNext() {
-    if (this.selectedObjectId < 9) {
+    if (this.selectedObjectId < 6) {
       this.tabsItemArray[this.selectedObjectId].completed = true;
-
+      this.falseAllSelected();
+      this.tabsItemArray[this.selectedObjectId].tick = true;
       this.selectedObjectId++;
 
       this.scrollValue = this.scrollItem(this.tabsItemArray[this.selectedObjectId]);
       this.progressValue = this.progressValue + 20;
       this.tabItemTap(this.selectedObjectId, "next");
+    }
+  }
+
+  falseAllSelected()
+  {
+    for (let index = 0; index < this.tabsItemArray.length; index++) {
+      this.tabsItemArray[index].tick = false;
     }
   }
 
@@ -143,31 +163,74 @@ export class StartupComponent {
     return this.tabsItemArray[this.selectedObjectId].access == true && this.tabsItemArray[this.selectedObjectId].completed != true;
   }
 
-  isDot(item) {
-    let centerTabId = this.selectedObjectId > 4 ? this.selectedObjectId : 4
-    return item.completed == false && item.id == centerTabId;
+  isDot() {
+    let index = this.findCurrentIndex();
+    let centerTabId = this.selectedObjectId > 1 ? this.selectedObjectId : 1
+    return this.tabsItemArray[index].access == true && index == centerTabId && this.tabsItemArray[index].completed == false;
   }
 
+  isTick() {
+    let centerTabId = this.selectedObjectId > 1 ? this.selectedObjectId : 1
+    return this.tabsItemArray[this.tabedId].tick == true && this.tabedId != centerTabId;
+  }
+
+
   isCurrent(item) {
-    let centerTabId = this.selectedObjectId > 4 ? this.selectedObjectId : 4
+    let centerTabId = this.selectedObjectId > 1 ? this.selectedObjectId : 1
     return item.id == centerTabId;
   }
 
   public scrollItem(scrollItem) {
-    this.listViewComponent.listView.scrollToIndex(scrollItem.id > 4 ? scrollItem.id : 4, true, ListViewItemSnapMode.Center);
+    this.listViewComponent.listView.scrollToIndex(scrollItem.id > 1 ? scrollItem.id : 1, true, ListViewItemSnapMode.Center);
   }
 
   getIndex(obj) {
     return _.findIndex(this.tabsItemArray, { obj });
   }
 
+  // public onScrollStarted(args: ListViewScrollEventData) {
+  //   console.log("workng on scroll Stated");
+  //   let index = this.findCurrentIndex();
+  //       if (index >= 1 && index < 6) {
+  //         this.listViewComponent.listView.scrollToIndex(index, true, ListViewItemSnapMode.Center);
+  //         this.getBadgesData(index);
+  //         console.log("workng on scroll Stated compleately works");
+  //       }
+  // }
+  tappedValue = false;
+  // public onScrollEnded(args: ListViewScrollEventData) {
+  //   if (this.tappedValue == false) {
+  //     console.log("workng on scroll Stated");
+  //       let index = this.findCurrentIndex();
+  //       if (index >= 1 && index < 6) {
+  //         this.listViewComponent.listView.scrollToIndex(index, true, ListViewItemSnapMode.Center);
+  //         this.getBadgesData(index);
+  //         let i = 0;
+  //         console.log("workng on scroll Stated compleately works" + i);
+  //       }
+  //   }
+  // }
+  public onScrolled(args: ListViewScrollEventData) {
+    if (this.tappedValue == false) {
+      setTimeout(() => {
+        console.log("workng on scroll Stated");
+        let index = this.findCurrentIndex();
+        if (index >= 1 && index < 6) {
+          this.listViewComponent.listView.scrollToIndex(index, true, ListViewItemSnapMode.Center);
+          this.getBadgesData(index);
+          let i = 0;
+          console.log("workng on scroll Stated compleately works" + i);
+        }
+      }, 110);
+    }
+  }
 
 
   public direction: number;
   onSwipe(args: SwipeGestureEventData) {
     console.log("Swipe!");
     console.log("Object that triggered the event: " + args.object);
-    console.log("View that triggered the event: " + args.view);
+    console.log("View that triggered theS event: " + args.view);
     console.log("Event name: " + args.eventName);
     console.log("Swipe Direction: " + args.direction);
 
@@ -176,7 +239,7 @@ export class StartupComponent {
     switch (this.direction) {
       case 1: {
         let index = this.findCurrentIndex();
-        if (index > 3 && index < 9) {
+        if (index >= 1 && index < 6) {
           index--;
           this.listViewComponent.listView.scrollToIndex(index, true, ListViewItemSnapMode.Center);
           this.getBadgesData(index);
@@ -185,7 +248,11 @@ export class StartupComponent {
       }
       case 2: {
         let index = this.findCurrentIndex();
-        if (index > 3 && index < 9) {
+        if (index >= 1 && index < 6) {
+          if (!this.tabsItemArray[index].completed) {
+            this.progressValue = this.progressValue + 20;
+          }
+
           this.tabsItemArray[index].completed = true;
           index++;
           this.listViewComponent.listView.scrollToIndex(index, true, ListViewItemSnapMode.Center);
@@ -199,18 +266,19 @@ export class StartupComponent {
   }
 
 
+
+
+
+
   findCurrentIndex() {
     return _.findIndex(this.tabsItemArray, { id: this.selectedObjectId });
   }
 
   initializeData() {
     this.tabsItemArray = [
-      { id: 0, name: "                     " },
-      { id: 1, name: "                     " },
-      { id: 2, name: "                     " },
-      { id: 3, name: "                     " },
+      { id: 0, name: "                              " },
       {
-        id: 4, access: true, name: "CURRENT STATE", completed: false, active: true,
+        id: 1, access: true, name: "CURRENT STATE", completed: false, active: true,tick: false,
         actionbar: "Your current status", badgesData: [
           { compare: "currentStatus", id: 0, title: "Employed", selected: false, },
           { compare: "currentStatus", id: 1, title: "Unmployed", selected: false, },
@@ -220,14 +288,14 @@ export class StartupComponent {
         ]
       },
       {
-        id: 5, access: false, name: "EDUCATION", completed: false, active: false, actionbar: "Your education", badgesData: [
+        id: 2, access: false, name: "EDUCATION", completed: false,tick: false,  active: false, actionbar: "Your education", badgesData: [
           { compare: "education", id: 0, title: "Graduate", selected: false, },
           { compare: "education", id: 1, title: "Matric", selected: false, },
           { compare: "education", id: 2, title: "Pre Engineering", selected: false, },
         ]
       },
       {
-        id: 6, access: false, name: "WORK", completed: false, active: false, actionbar: "Type of working looking for", badgesData: [
+        id: 3, access: false, name: "WORK", completed: false,tick: false,  active: false, actionbar: "Type of working looking for", badgesData: [
           { compare: "work", id: 0, title: "Full time", selected: false, },
           { compare: "work", id: 1, title: "part time", selected: false, },
           { compare: "work", id: 2, title: "extra income", selected: false, },
@@ -238,7 +306,7 @@ export class StartupComponent {
         ]
       },
       {
-        id: 7, access: false, name: "LOCATION", completed: false, active: false, actionbar: "Select your city", badgesData: [
+        id: 4, access: false, name: "LOCATION", completed: false,tick: false,  active: false, actionbar: "Select your city", badgesData: [
           { compare: "location", id: 0, title: "Lahore", selected: false, },
           { compare: "location", id: 1, title: "Karachi", selected: false, },
           { compare: "location", id: 2, title: "Islamabad", selected: false, },
@@ -247,15 +315,14 @@ export class StartupComponent {
         ]
       },
       {
-        id: 8, access: false, name: "SALARY", completed: false, active: false, actionbar: "Select your expected salary", badgesData: [
+        id: 5, access: false, name: "SALARY", completed: false, tick: false, active: false, actionbar: "Select your expected salary", badgesData: [
           { compare: "salary", id: 0, title: "10000", selected: false, },
           { compare: "salary", id: 1, title: "20000", selected: false, },
           { compare: "salary", id: 2, title: "15000", selected: false, },
           { compare: "salary", id: 3, title: "40000", selected: false, },
         ]
       },
-      { id: 9, name: "                     " },
-      { id: 10, name: "                     " },
+      { id: 6, name: "                                        " },
     ]
   }
 
