@@ -56,6 +56,7 @@ export class StartupComponent {
     elevation: 8,
     cornerRadius: 40,
   };
+  currentTabPosition;
 
   @ViewChild('myRadListView') listViewComponent: RadListViewComponent;
 
@@ -76,6 +77,8 @@ export class StartupComponent {
 
   onPageLoaded() {
     this.listViewComponent.listView.scrollToIndex(1, false, ListViewItemSnapMode.Center);
+   this.currentTabPosition =  this.listViewComponent.listView.getScrollOffset();
+         
   }
 
   getBadgesData(id) {
@@ -170,6 +173,7 @@ export class StartupComponent {
 
   public scrollItem(scrollItem) {
     this.listViewComponent.listView.scrollToIndex(scrollItem.id > 1 ? scrollItem.id : 1, true, ListViewItemSnapMode.Center);
+    this.currentTabPosition =this.listViewComponent.listView.getScrollOffset();
   }
 
   getIndex(obj) {
@@ -198,19 +202,34 @@ export class StartupComponent {
   //       }
   //   }
   // }
+  // public onScrolled(args: ListViewScrollEventData) {
+  //   if (this.tappedValue == false) {
+  //     setTimeout(() => {
+  //       console.log("workng on scroll Stated");
+  //       let index = this.findCurrentIndex();
+  //       if (index >= 1 && index < 6) {
+  //         this.listViewComponent.listView.scrollToIndex(index, true, ListViewItemSnapMode.Center);
+  //         this.getBadgesData(index);
+  //         let i = 0;
+  //         console.log("workng on scroll Stated compleately works" + i);
+  //       }
+  //     }, 110);
+  //   }
+  // }
+
   public onScrolled(args: ListViewScrollEventData) {
-    if (this.tappedValue == false) {
-      setTimeout(() => {
-        console.log("workng on scroll Stated");
-        let index = this.findCurrentIndex();
-        if (index >= 1 && index < 6) {
-          this.listViewComponent.listView.scrollToIndex(index, true, ListViewItemSnapMode.Center);
-          this.getBadgesData(index);
-          let i = 0;
-          console.log("workng on scroll Stated compleately works" + i);
-        }
-      }, 110);
+    console.log("the current scroll value is"+ this.currentTabPosition);
+    this.currentTabPosition;
+    if(args.scrollOffset < this.currentTabPosition)
+    {
+      console.log("moving right to the page");
+    
     }
+    else if(args.scrollOffset > this.currentTabPosition)
+    {
+      console.log("moving left to the page");
+    }
+
   }
 
 
